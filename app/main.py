@@ -2,12 +2,13 @@ from contextlib import asynccontextmanager
 import logging
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
-from app.core.config import get_settings
+from app.core.config import PROJECT_ROOT, get_settings
 from app.core.logging import configure_logging
 from app.ml.artifacts import load_artifact_bundle
 from app.ml.inference import verify_golden_sample
-from app.routers import health, prediction
+from app.routers import health, prediction, ui
 
 
 settings = get_settings()
@@ -38,15 +39,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.mount("/static", StaticFiles(directory=PROJECT_ROOT / "app" / "static"), name="static")
+
+app.include_router(ui.router)
 app.include_router(health.router)
 app.include_router(prediction.router)
-
-
-@app.get("/", tags=["application"])
-def root() -> dict[str, str]:
-    return {
-        "application": settings.app_name,
-        "status": "foundation-ready",
-        "documentation": "/docs",
-        "health": "/health",
-    }

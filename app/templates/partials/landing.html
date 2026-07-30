@@ -1,0 +1,94 @@
+<section class="relative flex min-h-screen items-center px-5 pb-20 pt-32 sm:px-8 lg:px-10">
+  <div class="mx-auto grid w-full max-w-7xl items-end gap-16 lg:grid-cols-[1.25fr_0.75fr]">
+    <div class="max-w-4xl">
+      <p class="eyebrow">Research interface · XGBoost · Version {{ app_version }}</p>
+      <h1 class="mt-7 max-w-5xl font-display text-6xl font-light leading-[0.92] tracking-[-0.065em] sm:text-7xl lg:text-[7.5rem]">
+        Explainable
+        <span class="block text-white/45">hematology</span>
+        pattern analysis.
+      </h1>
+      <p class="mt-8 max-w-2xl text-base leading-7 text-white/58 sm:text-lg">
+        HemaLens mengeksplorasi pola dari enam parameter hematologi menggunakan model penelitian XGBoost yang telah dibekukan dan diverifikasi secara reproduktif.
+      </p>
+
+      <div class="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <button
+          type="button"
+          class="button button--primary"
+          hx-get="/partials/form"
+          hx-target="#main-workspace"
+          hx-swap="innerHTML transition:true"
+          hx-indicator="#request-indicator"
+          @click="workspace = 'form'"
+        >
+          Try the research model
+          <span aria-hidden="true">↗</span>
+        </button>
+        <a class="text-link" href="#research">Review research context</a>
+      </div>
+    </div>
+
+    <aside class="border-l border-white/10 pl-6 lg:mb-3 lg:pl-8">
+      <p class="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-crimson-300">Halt &amp; read</p>
+      <p class="mt-4 max-w-md text-sm leading-6 text-white/52">
+        HemaLens adalah alat eksplorasi akademik, bukan alat diagnosis, skrining klinis, atau pengganti penilaian tenaga kesehatan. Jangan gunakan hasilnya untuk mengambil keputusan medis.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<section id="research" class="relative border-t border-white/8 px-5 py-24 sm:px-8 lg:px-10">
+  <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.7fr_1.3fr]">
+    <div>
+      <p class="eyebrow">Research basis</p>
+      <h2 class="section-title mt-5">Logic before pixels.</h2>
+    </div>
+    <div class="grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 sm:grid-cols-3">
+      <article class="info-card">
+        <p class="info-number">01</p>
+        <h3 class="info-title">Six inputs</h3>
+        <p class="info-copy">RBC, Hb, MCV, MCH, MCHC, dan RDW-CV diproses mengikuti urutan fitur model yang dibekukan.</p>
+      </article>
+      <article class="info-card">
+        <p class="info-number">02</p>
+        <h3 class="info-title">Fixed threshold</h3>
+        <p class="info-copy">Keputusan model menggunakan threshold penelitian 0.91, bukan ambang diagnosis klinis.</p>
+      </article>
+      <article class="info-card">
+        <p class="info-number">03</p>
+        <h3 class="info-title">No storage</h3>
+        <p class="info-copy">MVP tidak menyimpan identitas, input hematologi, maupun riwayat hasil ke database.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="relative border-t border-white/8 px-5 py-24 sm:px-8 lg:px-10">
+  <div class="mx-auto flex max-w-7xl flex-col justify-between gap-12 lg:flex-row lg:items-end">
+    <div class="max-w-3xl">
+      <p class="eyebrow">About HemaLens</p>
+      <h2 class="section-title mt-5">A restrained interface for model transparency.</h2>
+      <p class="mt-6 max-w-2xl text-base leading-7 text-white/55">
+        Antarmuka dibangun dengan FastAPI, Jinja2, HTMX, Alpine.js, dan Tailwind CSS. Lapisan visual Three.js ditambahkan setelah alur inference dasar stabil.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="button"
+      hx-get="/partials/form"
+      hx-target="#main-workspace"
+      hx-swap="innerHTML transition:true"
+      hx-indicator="#request-indicator"
+      @click="workspace = 'form'"
+    >
+      Start analysis
+    </button>
+  </div>
+</section>
+
+<footer class="relative border-t border-white/8 px-5 py-8 text-xs text-white/35 sm:px-8 lg:px-10">
+  <div class="mx-auto flex max-w-7xl flex-col justify-between gap-3 sm:flex-row">
+    <p>© 2026 HemaLens · Academic research interface</p>
+    <p>Not for diagnosis or clinical decision-making.</p>
+  </div>
+</footer>

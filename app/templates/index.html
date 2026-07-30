@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="id" class="bg-ink text-white">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="HemaLens adalah antarmuka penelitian untuk analisis pola hematologi berbasis model XGBoost."
+    />
+    <title>{{ app_name }} — Explainable Hematology Pattern Analysis</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/app.css') }}"
+    />
+    <script
+      src="{{ url_for('static', path='/js/app.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', path='/vendor/htmx.min.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', path='/vendor/alpine.min.js') }}"
+      defer
+    ></script>
+  </head>
+  <body
+    class="min-h-screen overflow-x-hidden bg-ink text-white antialiased selection:bg-crimson-500/40"
+    x-data="hemalensApp()"
+    x-init="init()"
+  >
+    <a
+      href="#main-workspace"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+    >
+      Lewati ke konten utama
+    </a>
+
+    <div
+      x-cloak
+      x-show="showSplash"
+      x-transition:leave="transition duration-700 ease-in"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="fixed inset-0 z-[90] grid place-items-center bg-ink"
+      role="status"
+      aria-live="polite"
+      aria-label="Memuat HemaLens"
+    >
+      <div class="relative flex flex-col items-center gap-6">
+        <div class="brand-mark brand-mark--large" aria-hidden="true">
+          <span></span>
+        </div>
+        <div class="text-center">
+          <p class="font-display text-4xl font-light tracking-[-0.04em] sm:text-5xl">
+            HemaLens
+          </p>
+          <p class="mt-3 text-[0.65rem] font-semibold uppercase tracking-[0.36em] text-white/45">
+            Logic before pixels
+          </p>
+        </div>
+        <div class="h-px w-24 overflow-hidden bg-white/10">
+          <div class="splash-progress h-full bg-crimson-400"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-background" aria-hidden="true">
+      <div class="site-orb site-orb--one"></div>
+      <div class="site-orb site-orb--two"></div>
+      <div class="site-grain"></div>
+    </div>
+
+    <header class="fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl">
+      <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10" aria-label="Navigasi utama">
+        <button
+          type="button"
+          class="group inline-flex items-center gap-3"
+          hx-get="/partials/landing"
+          hx-target="#main-workspace"
+          hx-swap="innerHTML transition:true"
+          @click="workspace = 'landing'"
+          aria-label="Kembali ke halaman utama HemaLens"
+        >
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span class="font-display text-xl font-light tracking-[-0.03em]">HemaLens</span>
+        </button>
+
+        <div class="flex items-center gap-2 sm:gap-6">
+          <a class="nav-link hidden sm:inline-flex" href="#research">Research</a>
+          <a class="nav-link hidden sm:inline-flex" href="#about">About</a>
+          <button
+            type="button"
+            class="button button--compact"
+            hx-get="/partials/form"
+            hx-target="#main-workspace"
+            hx-swap="innerHTML transition:true"
+            @click="workspace = 'form'"
+          >
+            Try model
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main-workspace" class="relative z-10 min-h-screen" aria-live="polite">
+      {% include "partials/landing.html" %}
+    </main>
+
+    <div id="request-indicator" class="htmx-indicator fixed bottom-5 right-5 z-50" role="status">
+      <div class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-black/80 px-4 py-3 text-sm text-white/75 shadow-2xl backdrop-blur-xl">
+        <span class="size-2 animate-pulse rounded-full bg-crimson-400"></span>
+        Memproses permintaan
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "hemalens-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend build tooling for the HemaLens research interface.",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./app/static/src/input.css -o ./app/static/css/app.css --minify",
+    "watch:css": "npx @tailwindcss/cli -i ./app/static/src/input.css -o ./app/static/css/app.css --watch",
+    "copy:vendor": "node ./scripts/copy-vendor.mjs",
+    "build": "npm run build:css && npm run copy:vendor"
+  },
+  "dependencies": {
+    "alpinejs": "3.15.12",
+    "htmx.org": "2.0.10"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.1",
+    "tailwindcss": "4.3.1"
+  }
+}
