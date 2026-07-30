@@ -1,0 +1,36 @@
+<section class="relative min-h-screen px-5 pb-20 pt-32 sm:px-8 lg:px-10">
+  <div class="mx-auto max-w-3xl">
+    <div class="panel p-6 sm:p-10">
+      <p class="eyebrow text-crimson-300">Input requires review</p>
+      <h1 class="section-title mt-5">Analysis was not run.</h1>
+      <p class="mt-6 text-base leading-7 text-white/58">{{ message }}</p>
+
+      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] p-5 text-sm leading-6 text-white/45">
+        Tidak ada hasil prediksi yang dibuat. Perbaiki input melalui form dan kirim ulang setelah acknowledgement dicentang.
+      </div>
+
+      <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+        <button
+          type="button"
+          class="button button--primary"
+          hx-get="/partials/form"
+          hx-target="#main-workspace"
+          hx-swap="innerHTML transition:true"
+          @click="workspace = 'form'"
+        >
+          Return to form
+        </button>
+        <button
+          type="button"
+          class="button"
+          hx-get="/partials/landing"
+          hx-target="#main-workspace"
+          hx-swap="innerHTML transition:true"
+          @click="workspace = 'landing'"
+        >
+          Back to overview
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
