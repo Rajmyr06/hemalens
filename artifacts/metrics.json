@@ -1,0 +1,24 @@
+{
+  "model": "XGBoost",
+  "scenario": "SMOTE",
+  "threshold": 0.91,
+  "accuracy": 0.9693301049233253,
+  "precision_macro": 0.8422681236369449,
+  "recall_macro": 0.8153136253186394,
+  "f1_macro": 0.8281628660690823,
+  "thalassemia_precision": 0.7027027027027027,
+  "thalassemia_recall": 0.6446280991735537,
+  "thalassemia_f1": 0.6724137931034483,
+  "roc_auc": 0.9742143150173389,
+  "pr_auc": 0.7572742372118284,
+  "confusion_matrix": [
+    [
+      2324,
+      33
+    ],
+    [
+      43,
+      78
+    ]
+  ]
+}

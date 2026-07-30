@@ -1,0 +1,11 @@
+services:
+  hemalens:
+    build: .
+    container_name: hemalens-app
+    ports:
+      - "8000:8000"
+    environment:
+      HEMALENS_APP_ENV: production
+      HEMALENS_DEBUG: "false"
+      HEMALENS_LOG_LEVEL: INFO
+    restart: unless-stopped

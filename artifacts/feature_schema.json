@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0.0",
+  "features": [
+    {
+      "name": "rbc",
+      "position": 0,
+      "dtype": "float",
+      "required": true,
+      "unit": "10^6 cells/µL",
+      "unit_source": {
+        "source": "MedlinePlus CBC/RBC count",
+        "url": "https://medlineplus.gov/ency/article/003644.htm",
+        "basis": "RBC count commonly reported in million cells per microliter."
+      },
+      "technical_min": null,
+      "technical_max": null,
+      "training_distribution": {
+        "min": 1.24,
+        "q01": 2.8907000000000003,
+        "q05": 3.25,
+        "median": 4.27,
+        "q95": 5.48,
+        "q99": 6.01,
+        "max": 8.41
+      }
+    },
+    {
+      "name": "hb",
+      "position": 1,
+      "dtype": "float",
+      "required": true,
+      "unit": "g/dL",
+      "unit_source": {
+        "source": "MedlinePlus CBC blood test",
+        "url": "https://medlineplus.gov/ency/article/003642.htm",
+        "basis": "Hemoglobin commonly reported in g/dL."
+      },
+      "technical_min": null,
+      "technical_max": null,
+      "training_distribution": {
+        "min": 2.8,
+        "q01": 7.4,
+        "q05": 9.1,
+        "median": 11.7,
+        "q95": 14.9,
+        "q99": 15.8,
+        "max": 18.6
+      }
+    },
+    {
+      "name": "mcv",
+      "position": 2,
+      "dtype": "float",
+      "required": true,
+      "unit": "fL",
+      "unit_source": {
+        "source": "MedlinePlus RBC indices",
+        "url": "https://medlineplus.gov/ency/article/003648.htm",
+        "basis": "MCV reported in femtoliters."
+      },
+      "technical_min": null,
+      "technical_max": null,
+      "training_distribution": {
+        "min": 8.3,
+        "q01": 62.007,
+        "q05": 68.9,
+        "median": 86.6,
+        "q95": 98.4,
+        "q99": 103.6,
+        "max": 114.5
+      }
+    },
+    {
+      "name": "mch",
+      "position": 3,
+      "dtype": "float",
+      "required": true,
+      "unit": "pg/cell",
+      "unit_source": {
+        "source": "MedlinePlus RBC indices",
+        "url": "https://medlineplus.gov/ency/article/003648.htm",
+        "basis": "MCH reported in picograms per cell."
+      },
+      "technical_min": null,
+      "technical_max": null,
+      "training_distribution": {
+        "min": 10.3,
+        "q01": 17.807000000000002,
+        "q05": 20.6,
+        "median": 28.1,
+        "q95": 33.3,
+        "q99": 35.3,
+        "max": 76.5
+      }
+    },
+    {
+      "name": "mchc",
+      "position": 4,
+      "dtype": "float",
+      "required": true,
+      "unit": "g/dL",
+      "unit_source": {
+        "source": "MedlinePlus RBC indices",
+        "url": "https://medlineplus.gov/ency/article/003648.htm",
+        "basis": "MCHC reported in g/dL."
+      },
+      "technical_min": null,
+      "technical_max": null,
+      "training_distribution": {
+        "min": 16.0,
+        "q01": 26.1,
+        "q05": 28.0,
+        "median": 32.1,
+        "q95": 36.3,
+        "q99": 37.4,
+        "max": 316.0
+      }
+    },
+    {
+      "name": "rdwcv",
+      "position": 5,
+      "dtype": "float",
+      "required": true,
+      "unit": "%",
+      "unit_source": {
+        "source": "MedlinePlus RDW",
+        "url": "https://medlineplus.gov/lab-tests/rdw-red-cell-distribution-width/",
+        "basis": "RDW-CV is reported as a percentage."
+      },
+      "technical_min": null,
+      "technical_max": null,
+      "training_distribution": {
+        "min": 9.9,
+        "q01": 11.0,
+        "q05": 11.9,
+        "median": 14.1,
+        "q95": 18.1,
+        "q99": 21.89300000000003,
+        "max": 36.8
+      }
+    }
+  ],
+  "clinical_reference_ranges_included": false,
+  "note": "Training-distribution values are descriptive and must not be presented as clinical reference ranges. The dataset card does not explicitly state units; units follow standard CBC conventions consistent with field names and observed scales."
+}
