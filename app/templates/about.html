@@ -1,0 +1,70 @@
+{% extends "secondary_base.html" %}
+
+{% block title %}About — {{ app_name }}{% endblock %}
+
+{% block description %}
+Tentang tujuan, prinsip privasi, dan batas penggunaan HemaLens.
+{% endblock %}
+
+{% block content %}
+<section class="content-page__hero">
+  <p class="content-page__eyebrow">About HemaLens</p>
+  <h1>A focused interface for explainable hematology research.</h1>
+  <p class="content-page__lead">
+    HemaLens dirancang sebagai antarmuka penelitian yang membuat proses
+    inference lebih mudah diuji, ditinjau, dan didokumentasikan tanpa
+    mengubahnya menjadi aplikasi diagnosis klinis.
+  </p>
+</section>
+
+<section class="content-page__grid" aria-label="Tentang HemaLens">
+  <article class="content-card">
+    <span class="content-card__index">01</span>
+    <p class="content-card__label">Purpose</p>
+    <h2>Academic model exploration</h2>
+    <p>
+      Website menyediakan alur terstruktur untuk memasukkan parameter,
+      menjalankan model penelitian, dan membaca output dasar secara
+      konsisten.
+    </p>
+  </article>
+
+  <article class="content-card">
+    <span class="content-card__index">02</span>
+    <p class="content-card__label">Privacy</p>
+    <h2>No input history</h2>
+    <p>
+      Versi saat ini tidak menggunakan akun, database pasien, atau
+      riwayat analisis. Input dan hasil tidak disimpan oleh aplikasi.
+    </p>
+  </article>
+
+  <article class="content-card">
+    <span class="content-card__index">03</span>
+    <p class="content-card__label">Architecture</p>
+    <h2>FastAPI research application</h2>
+    <p>
+      FastAPI menangani validasi dan inference, sementara antarmuka
+      server-rendered mempertahankan alur yang ringan dan mudah diaudit.
+    </p>
+  </article>
+
+  <article class="content-card">
+    <span class="content-card__index">04</span>
+    <p class="content-card__label">Limitations</p>
+    <h2>Not medical advice</h2>
+    <p>
+      HemaLens tidak memberikan nasihat medis dan tidak boleh dijadikan
+      dasar diagnosis, skrining, terapi, atau keputusan kesehatan.
+    </p>
+  </article>
+</section>
+
+<div class="content-page__actions">
+  <a class="button button--primary" href="/#try-model">
+    Open HemaLens
+    <span aria-hidden="true">↗</span>
+  </a>
+  <a class="button button--compact" href="/">Back home</a>
+</div>
+{% endblock %}

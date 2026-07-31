@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id" class="bg-ink text-white">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="{% block description %}HemaLens research interface.{% endblock %}"
+    />
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/app.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/content-pages.css') }}?v=1.0.0"
+    />
+  </head>
+
+  <body class="min-h-screen overflow-x-hidden bg-ink text-white antialiased">
+    <div class="site-background" aria-hidden="true">
+      <div class="site-orb site-orb--one"></div>
+      <div class="site-orb site-orb--two"></div>
+      <div class="site-grain"></div>
+    </div>
+
+    <header class="fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl">
+      <nav
+        class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10"
+        aria-label="Navigasi utama"
+      >
+        <a
+          href="/"
+          class="group inline-flex items-center gap-3"
+          aria-label="Kembali ke halaman utama HemaLens"
+        >
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span class="font-display text-xl font-light tracking-[-0.03em]">
+            HemaLens
+          </span>
+        </a>
+
+        <div class="flex items-center gap-2 sm:gap-6">
+          <a
+            class="nav-link hidden sm:inline-flex {% if active_page == 'research' %}is-active{% endif %}"
+            href="/research"
+            {% if active_page == 'research' %}aria-current="page"{% endif %}
+          >
+            Research
+          </a>
+
+          <a
+            class="nav-link hidden sm:inline-flex {% if active_page == 'about' %}is-active{% endif %}"
+            href="/about"
+            {% if active_page == 'about' %}aria-current="page"{% endif %}
+          >
+            About
+          </a>
+
+          <a class="button button--compact" href="/#try-model">
+            Try model
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="content-page">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

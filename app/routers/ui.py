@@ -145,3 +145,25 @@ async def prediction_result(
         name="partials/result.html",
         context=context,
     )
+
+@router.get("/research", response_class=HTMLResponse)
+def research_page(request: Request) -> HTMLResponse:
+    context = _base_context(request)
+    context["active_page"] = "research"
+    return templates.TemplateResponse(
+        request=request,
+        name="research.html",
+        context=context,
+    )
+
+
+@router.get("/about", response_class=HTMLResponse)
+def about_page(request: Request) -> HTMLResponse:
+    context = _base_context(request)
+    context["active_page"] = "about"
+    return templates.TemplateResponse(
+        request=request,
+        name="about.html",
+        context=context,
+    )
+

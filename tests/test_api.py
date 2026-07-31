@@ -109,3 +109,20 @@ def test_ui_prediction_renders_non_diagnostic_result() -> None:
     assert "Normal pattern" in response.text
     assert "bukan probabilitas klinis" in response.text
     assert "hematology-xgb-smote-thr091-v1.0.0" in response.text
+
+
+def test_landing_includes_progressive_threejs_scene() -> None:
+    with TestClient(app) as client:
+        response = client.get("/")
+
+    assert response.status_code == 200
+    assert 'id="hemalens-scene"' in response.text
+    assert '/static/js/hemalens-scene.js' in response.text
+
+def test_three_vendor_modules_are_served() -> None:
+    with TestClient(app) as client:
+        module_response = client.get("/static/vendor/three.module.js")
+        core_response = client.get("/static/vendor/three.core.js")
+
+    assert module_response.status_code == 200
+    assert core_response.status_code == 200

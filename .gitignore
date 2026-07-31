@@ -20,3 +20,5 @@ data/
 .idea/
 node_modules/
 npm-debug.log*
+
+.hemalens-backups/

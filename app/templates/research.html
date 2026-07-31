@@ -1,0 +1,71 @@
+{% extends "secondary_base.html" %}
+
+{% block title %}Research — {{ app_name }}{% endblock %}
+
+{% block description %}
+Dokumentasi konteks penelitian, model, batas penggunaan, dan transparansi HemaLens.
+{% endblock %}
+
+{% block content %}
+<section class="content-page__hero">
+  <p class="content-page__eyebrow">Research transparency</p>
+  <h1>How HemaLens produces its research output.</h1>
+  <p class="content-page__lead">
+    Halaman ini menjelaskan ruang lingkup model, input yang digunakan,
+    kebijakan keputusan, dan batas interpretasi hasil.
+  </p>
+</section>
+
+<section class="content-page__grid" aria-label="Informasi penelitian">
+  <article class="content-card">
+    <span class="content-card__index">01</span>
+    <p class="content-card__label">Model scope</p>
+    <h2>Frozen XGBoost inference bundle</h2>
+    <p>
+      HemaLens menggunakan artefak model yang dibekukan agar hasil
+      inference pada aplikasi tetap konsisten dengan bundle penelitian
+      yang telah diverifikasi.
+    </p>
+  </article>
+
+  <article class="content-card">
+    <span class="content-card__index">02</span>
+    <p class="content-card__label">Model inputs</p>
+    <h2>Six hematology parameters</h2>
+    <p>
+      Urutan fitur yang digunakan adalah RBC, Hb, MCV, MCH, MCHC,
+      dan RDW-CV. Aplikasi menolak field tambahan pada request API.
+    </p>
+  </article>
+
+  <article class="content-card">
+    <span class="content-card__index">03</span>
+    <p class="content-card__label">Decision policy</p>
+    <h2>Threshold 0.91</h2>
+    <p>
+      Model decision score dibandingkan dengan threshold 0.91 untuk
+      menghasilkan klasifikasi pola. Score tersebut merupakan output
+      internal model, bukan probabilitas klinis.
+    </p>
+  </article>
+
+  <article class="content-card">
+    <span class="content-card__index">04</span>
+    <p class="content-card__label">Clinical boundary</p>
+    <h2>Non-diagnostic research interface</h2>
+    <p>
+      Hasil tidak boleh digunakan untuk diagnosis, skrining klinis,
+      keputusan terapi, atau pengganti pemeriksaan laboratorium dan
+      evaluasi tenaga kesehatan yang berkualifikasi.
+    </p>
+  </article>
+</section>
+
+<div class="content-page__actions">
+  <a class="button button--primary" href="/#try-model">
+    Try the research model
+    <span aria-hidden="true">↗</span>
+  </a>
+  <a class="button button--compact" href="/">Back home</a>
+</div>
+{% endblock %}

@@ -1,6 +1,8 @@
 window.hemalensApp = function hemalensApp() {
   return {
     showSplash: false,
+    contentReady: false,
+    landingEntered: false,
     workspace: "landing",
 
     init() {
@@ -8,12 +10,24 @@ window.hemalensApp = function hemalensApp() {
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
-      this.showSplash = !reduceMotion;
-      if (this.showSplash) {
-        window.setTimeout(() => {
-          this.showSplash = false;
-        }, 2200);
+      if (reduceMotion) {
+        this.contentReady = true;
+        this.landingEntered = true;
+        return;
       }
+
+      this.showSplash = true;
+
+      window.setTimeout(() => {
+        this.contentReady = true;
+
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            this.landingEntered = true;
+            this.showSplash = false;
+          });
+        });
+      }, 2200);
     },
   };
 };
