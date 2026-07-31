@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.hemalens-backups
+node_modules
+tests
+docs
+__pycache__
+*.pyc
+*.zip
+.DS_Store
