@@ -4,6 +4,8 @@ import { dirname, resolve } from "node:path";
 const files = [
   ["node_modules/htmx.org/dist/htmx.min.js", "app/static/vendor/htmx.min.js"],
   ["node_modules/alpinejs/dist/cdn.min.js", "app/static/vendor/alpine.min.js"],
+  ["node_modules/three/build/three.core.js", "app/static/vendor/three.core.js"],
+  ["node_modules/three/build/three.module.js", "app/static/vendor/three.module.js"],
 ];
 
 for (const [source, destination] of files) {

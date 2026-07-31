@@ -17,6 +17,10 @@
       defer
     ></script>
     <script
+      type="module"
+      src="{{ url_for('static', path='/js/hemalens-scene.js') }}"
+    ></script>
+    <script
       src="{{ url_for('static', path='/vendor/htmx.min.js') }}"
       defer
     ></script>
@@ -27,6 +31,7 @@
   </head>
   <body
     class="min-h-screen overflow-x-hidden bg-ink text-white antialiased selection:bg-crimson-500/40"
+    :class="{ 'is-splashing': showSplash || !contentReady }"
     x-data="hemalensApp()"
     x-init="init()"
   >
@@ -40,10 +45,10 @@
     <div
       x-cloak
       x-show="showSplash"
-      x-transition:leave="transition duration-700 ease-in"
-      x-transition:leave-start="opacity-100"
-      x-transition:leave-end="opacity-0"
-      class="fixed inset-0 z-[90] grid place-items-center bg-ink"
+      x-transition:leave="transition duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+      x-transition:leave-start="opacity-100 scale-100 blur-0"
+      x-transition:leave-end="opacity-0 scale-[1.025] blur-sm"
+      class="splash-screen fixed inset-0 z-[90] grid place-items-center"
       role="status"
       aria-live="polite"
       aria-label="Memuat HemaLens"
@@ -67,12 +72,18 @@
     </div>
 
     <div class="site-background" aria-hidden="true">
+      <div id="hemalens-scene" class="hemalens-scene" data-active="false"></div>
       <div class="site-orb site-orb--one"></div>
       <div class="site-orb site-orb--two"></div>
       <div class="site-grain"></div>
     </div>
 
-    <header class="fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl">
+    <header
+      x-cloak
+      x-show="contentReady"
+      :class="{ 'landing-reveal--active': landingEntered }"
+      class="landing-reveal landing-reveal--header fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl"
+    >
       <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10" aria-label="Navigasi utama">
         <button
           type="button"
@@ -104,7 +115,14 @@
       </nav>
     </header>
 
-    <main id="main-workspace" class="relative z-10 min-h-screen" aria-live="polite">
+    <main
+      id="main-workspace"
+      x-cloak
+      x-show="contentReady"
+      :class="{ 'landing-reveal--active': landingEntered }"
+      class="landing-reveal landing-reveal--main relative z-10 min-h-screen"
+      aria-live="polite"
+    >
       {% include "partials/landing.html" %}
     </main>
 
@@ -114,5 +132,11 @@
         Memproses permintaan
       </div>
     </div>
+  
+    <script
+      src="{{ url_for('static', path='/js/hero-typewriter.js') }}?v=2b5"
+      defer
+    ></script>
+
   </body>
 </html>
