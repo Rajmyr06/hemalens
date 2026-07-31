@@ -10,7 +10,7 @@
     <title>{{ app_name }} — Explainable Hematology Pattern Analysis</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', path='/css/app.css') }}"
+      href="{{ url_for('static', path='/css/app.css') }}?v=2b7"
     />
     <script
       src="{{ url_for('static', path='/js/app.js') }}"
@@ -28,6 +28,10 @@
       src="{{ url_for('static', path='/vendor/alpine.min.js') }}"
       defer
     ></script>
+      <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/landing-v4.css') }}?v=4.0.0"
+    />
   </head>
   <body
     class="min-h-screen overflow-x-hidden bg-ink text-white antialiased selection:bg-crimson-500/40"
@@ -99,8 +103,8 @@
         </button>
 
         <div class="flex items-center gap-2 sm:gap-6">
-          <a class="nav-link hidden sm:inline-flex" href="#research">Research</a>
-          <a class="nav-link hidden sm:inline-flex" href="#about">About</a>
+          <a class="nav-link hidden sm:inline-flex" href="/research">Research</a>
+          <a class="nav-link hidden sm:inline-flex" href="/about">About</a>
           <button
             type="button"
             class="button button--compact"
