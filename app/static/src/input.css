@@ -398,3 +398,60 @@
     opacity: 1;
   }
 }
+
+/* HEMALENS SINGLE-LINE TYPEWRITER */
+
+.hemalens-landing-hero__inner {
+  width: min(97vw, 120rem);
+  max-width: none;
+}
+
+.hemalens-hero-heading {
+  display: flex;
+  width: 100%;
+  min-height: 1.1em;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  overflow: visible;
+  font-size: clamp(2.3rem, 4.65vw, 5.8rem);
+  font-weight: 300;
+  line-height: 0.96;
+  letter-spacing: -0.058em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hemalens-typewriter-single {
+  display: block;
+  width: 100%;
+  min-height: 1.1em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hemalens-hero-heading
+  .hemalens-typewriter-line {
+  display: inline-block;
+  min-height: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .hemalens-landing-hero__inner {
+    width: 100%;
+  }
+
+  .hemalens-hero-heading {
+    font-size: clamp(1.15rem, 5.1vw, 2.6rem);
+    line-height: 1;
+    letter-spacing: -0.048em;
+    white-space: nowrap;
+  }
+
+  .hemalens-typewriter-single,
+  .hemalens-hero-heading
+    .hemalens-typewriter-line {
+    white-space: nowrap;
+  }
+}

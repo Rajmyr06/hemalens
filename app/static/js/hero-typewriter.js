@@ -1,16 +1,12 @@
 (() => {
-  const TEXTS = [
-    "Explainable",
-    "hematology",
-    "pattern analysis.",
-  ];
+  const TEXT =
+    "Explainable hematology pattern analysis.";
 
   class HemaLensHeroTypewriter {
     constructor() {
       this.root = null;
-      this.nodes = [];
-      this.values = ["", "", ""];
-      this.lineIndex = 0;
+      this.node = null;
+      this.index = 0;
       this.deleting = false;
       this.timerId = null;
     }
@@ -32,15 +28,13 @@
       this.destroy();
 
       this.root = root;
-      this.nodes = Array.from(
-        root.querySelectorAll(
-          "[data-hemalens-typewriter-line]",
-        ),
+      this.node = root.querySelector(
+        "[data-hemalens-typewriter-line]",
       );
 
-      if (this.nodes.length !== TEXTS.length) {
+      if (!this.node) {
         console.error(
-          "HemaLens typewriter: jumlah baris tidak sesuai.",
+          "HemaLens typewriter node tidak ditemukan.",
         );
         return;
       }
@@ -50,41 +44,53 @@
           "(prefers-reduced-motion: reduce)",
         ).matches
       ) {
-        this.renderStatic();
+        this.node.textContent = TEXT;
         return;
       }
 
-      this.values = ["", "", ""];
-      this.lineIndex = 0;
+      this.index = 0;
       this.deleting = false;
-      this.render();
-      this.waitUntilVisible();
+      this.node.textContent = "";
+      this.node.dataset.active = "true";
+
+      this.waitUntilLandingVisible();
     }
 
-    waitUntilVisible() {
+    waitUntilLandingVisible() {
       if (!this.root?.isConnected) {
         this.destroy();
         return;
       }
 
-      const visible =
-        this.root.getClientRects().length > 0 &&
-        window.getComputedStyle(this.root).visibility !==
-          "hidden";
+      const splash = document.querySelector(
+        "[data-hemalens-splash], [role='status']",
+      );
 
-      if (!visible) {
+      const splashVisible =
+        splash &&
+        splash.getClientRects().length > 0 &&
+        window.getComputedStyle(splash).display !==
+          "none" &&
+        Number.parseFloat(
+          window.getComputedStyle(splash).opacity || "1",
+        ) > 0.05;
+
+      const headingVisible =
+        this.root.getClientRects().length > 0;
+
+      if (splashVisible || !headingVisible) {
         this.schedule(
-          () => this.waitUntilVisible(),
+          () => this.waitUntilLandingVisible(),
           100,
         );
         return;
       }
 
-      this.schedule(() => this.step(), 450);
+      this.schedule(() => this.step(), 400);
     }
 
     step() {
-      if (!this.root?.isConnected) {
+      if (!this.node?.isConnected) {
         this.destroy();
         return;
       }
@@ -94,27 +100,18 @@
         return;
       }
 
-      const target = TEXTS[this.lineIndex];
-      const current = this.values[this.lineIndex];
-
       if (!this.deleting) {
-        if (current.length < target.length) {
-          this.values[this.lineIndex] =
-            target.slice(0, current.length + 1);
-
-          this.render();
+        if (this.index < TEXT.length) {
+          this.index += 1;
+          this.node.textContent = TEXT.slice(
+            0,
+            this.index,
+          );
 
           this.schedule(
             () => this.step(),
-            65 + Math.random() * 35,
+            52 + Math.random() * 28,
           );
-          return;
-        }
-
-        if (this.lineIndex < TEXTS.length - 1) {
-          this.lineIndex += 1;
-          this.render();
-          this.schedule(() => this.step(), 220);
           return;
         }
 
@@ -123,53 +120,27 @@
         return;
       }
 
-      if (current.length > 0) {
-        this.values[this.lineIndex] =
-          current.slice(0, -1);
-
-        this.render();
+      if (this.index > 0) {
+        this.index -= 1;
+        this.node.textContent = TEXT.slice(
+          0,
+          this.index,
+        );
 
         this.schedule(
           () => this.step(),
-          30 + Math.random() * 18,
+          25 + Math.random() * 14,
         );
         return;
       }
 
-      if (this.lineIndex > 0) {
-        this.lineIndex -= 1;
-        this.render();
-        this.schedule(() => this.step(), 100);
-        return;
-      }
-
       this.deleting = false;
-      this.lineIndex = 0;
-      this.render();
-      this.schedule(() => this.step(), 550);
-    }
-
-    render() {
-      this.nodes.forEach((node, index) => {
-        node.textContent = this.values[index];
-
-        if (index === this.lineIndex) {
-          node.dataset.active = "true";
-        } else {
-          delete node.dataset.active;
-        }
-      });
-    }
-
-    renderStatic() {
-      this.nodes.forEach((node, index) => {
-        node.textContent = TEXTS[index];
-        delete node.dataset.active;
-      });
+      this.schedule(() => this.step(), 500);
     }
 
     schedule(callback, delay) {
       window.clearTimeout(this.timerId);
+
       this.timerId = window.setTimeout(
         callback,
         delay,
@@ -180,12 +151,14 @@
       window.clearTimeout(this.timerId);
       this.timerId = null;
 
-      this.nodes.forEach((node) => {
-        delete node.dataset.active;
-      });
+      if (this.node) {
+        delete this.node.dataset.active;
+      }
 
       this.root = null;
-      this.nodes = [];
+      this.node = null;
+      this.index = 0;
+      this.deleting = false;
     }
   }
 
@@ -203,6 +176,11 @@
 
   document.addEventListener(
     "htmx:afterSwap",
+    mount,
+  );
+
+  document.addEventListener(
+    "htmx:afterSettle",
     mount,
   );
 
