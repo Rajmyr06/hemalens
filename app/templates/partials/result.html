@@ -1,10 +1,10 @@
-<section class="relative min-h-screen px-5 pb-20 pt-32 sm:px-8 lg:px-10">
+<section class="workspace-page workspace-page--result relative min-h-screen px-5 pb-20 pt-32 sm:px-8 lg:px-10" data-page="result">
   <div class="mx-auto max-w-7xl">
     <p class="eyebrow">Analysis complete</p>
-    <div class="mt-6 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-      <article class="panel p-6 sm:p-9 lg:p-12">
+    <div class="result-grid mt-6 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <article class="panel result-panel p-6 sm:p-9 lg:p-12">
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-white/38">Model classification</p>
-        <h1 class="mt-5 font-display text-5xl font-light tracking-[-0.05em] sm:text-6xl">
+        <h1 class="result-title mt-5 font-display text-5xl font-light tracking-[-0.05em] sm:text-6xl" data-page-heading tabindex="-1">
           {{ outcome_title }}
         </h1>
         <p class="mt-6 max-w-2xl text-base leading-7 text-white/58">{{ outcome_text }}</p>
@@ -17,16 +17,20 @@
         </div>
       </article>
 
-      <aside class="panel p-6 sm:p-9">
-        <div class="flex items-end justify-between gap-6">
+      <aside class="panel result-panel p-6 sm:p-9">
+        <div class="result-score-header flex items-end justify-between gap-6">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.23em] text-white/38">Model decision score</p>
-            <p class="mt-3 font-display text-5xl font-light tracking-[-0.05em]">{{ '%.6f'|format(result.model_score) }}</p>
+            <p class="result-score mt-3 font-display text-5xl font-light tracking-[-0.05em]">{{ '%.6f'|format(result.model_score) }}</p>
           </div>
-          <p class="pb-1 text-right text-xs leading-5 text-white/38">Class<br />Thalassemia_related</p>
+          <p class="result-score-target pb-1 text-right text-xs leading-5 text-white/38">Score target<br />Thalassemia-related</p>
         </div>
 
-        <div class="mt-8">
+        <div
+          class="result-scale mt-8"
+          role="img"
+          aria-label="Model score {{ '%.6f'|format(result.model_score) }} compared with decision threshold {{ result.threshold }}"
+        >
           <div class="relative h-2 rounded-full bg-white/8">
             <div
               class="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-white/30 to-crimson-400"
@@ -38,35 +42,35 @@
               title="Threshold {{ result.threshold }}"
             ></div>
           </div>
-          <div class="mt-3 flex justify-between text-[0.65rem] text-white/32">
+          <div class="result-scale-labels mt-3 flex justify-between text-[0.65rem] text-white/32">
             <span>0.00</span>
             <span>Threshold {{ result.threshold }}</span>
             <span>1.00</span>
           </div>
         </div>
 
-        <dl class="mt-9 divide-y divide-white/8 border-y border-white/8 text-sm">
-          <div class="flex justify-between gap-6 py-4">
+        <dl class="result-metadata mt-9 divide-y divide-white/8 border-y border-white/8 text-sm">
+          <div class="result-metadata-row flex justify-between gap-6 py-4">
             <dt class="text-white/42">Model version</dt>
             <dd class="break-all text-right text-white/75">{{ result.model_version }}</dd>
           </div>
-          <div class="flex justify-between gap-6 py-4">
+          <div class="result-metadata-row flex justify-between gap-6 py-4">
             <dt class="text-white/42">Decision threshold</dt>
             <dd class="text-white/75">{{ result.threshold }}</dd>
           </div>
-          <div class="flex justify-between gap-6 py-4">
+          <div class="result-metadata-row flex justify-between gap-6 py-4">
             <dt class="text-white/42">Stored by application</dt>
             <dd class="text-white/75">No</dd>
           </div>
         </dl>
 
         <p class="mt-6 text-xs leading-5 text-white/35">
-          Score adalah output internal model untuk kelas Thalassemia_related. Nilai ini bukan probabilitas klinis atau tingkat kepastian diagnosis.
+          Score adalah output internal model untuk kelas Thalassemia-related. Nilai ini bukan probabilitas klinis atau tingkat kepastian diagnosis.
         </p>
       </aside>
     </div>
 
-    <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+    <div class="result-actions mt-8 flex flex-col gap-4 sm:flex-row">
       <button
         type="button"
         class="button button--primary"

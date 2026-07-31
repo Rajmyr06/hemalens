@@ -1,6 +1,6 @@
-<section class="relative min-h-screen px-5 pb-20 pt-32 sm:px-8 lg:px-10" x-data="{ agreed: false }">
-  <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.72fr_1.28fr]">
-    <div class="lg:sticky lg:top-28 lg:self-start">
+<section class="workspace-page workspace-page--form relative min-h-screen px-5 pb-20 pt-32 sm:px-8 lg:px-10" x-data="{ agreed: false }" data-page="form">
+  <div class="workspace-layout mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.72fr_1.28fr]">
+    <div class="workspace-intro lg:sticky lg:top-28 lg:self-start">
       <button
         type="button"
         class="text-link"
@@ -13,12 +13,12 @@
       </button>
 
       <p class="eyebrow mt-12">Model workspace</p>
-      <h1 class="section-title mt-5 max-w-xl">Enter six hematology values.</h1>
+      <h1 class="section-title mt-5 max-w-xl" data-page-heading tabindex="-1">Enter six hematology values.</h1>
       <p class="mt-6 max-w-lg text-base leading-7 text-white/55">
         Masukkan data numerik tanpa identitas pasien. Satuan dan rentang referensi klinis belum ditampilkan karena masih menunggu verifikasi dokumentasi penelitian.
       </p>
 
-      <div class="mt-10 border-l border-crimson-400/70 pl-5">
+      <div class="academic-boundary mt-10 border-l border-crimson-400/70 pl-5">
         <p class="text-sm font-medium text-white/85">Academic use only</p>
         <p class="mt-2 text-sm leading-6 text-white/48">
           Output adalah klasifikasi pola internal model dan tidak boleh ditafsirkan sebagai diagnosis atau probabilitas klinis.
@@ -27,66 +27,75 @@
     </div>
 
     <form
-      class="panel p-5 sm:p-8 lg:p-10"
+      class="analysis-form panel p-5 sm:p-8 lg:p-10"
       hx-post="/ui/predict"
       hx-target="#main-workspace"
       hx-swap="innerHTML transition:true"
       hx-indicator="#request-indicator"
+      data-analysis-form
     >
-      <div class="grid gap-5 sm:grid-cols-2">
-        {% set fields = [
-          ('rbc', 'RBC', 'Red blood cell count'),
-          ('hb', 'Hb', 'Hemoglobin'),
-          ('mcv', 'MCV', 'Mean corpuscular volume'),
-          ('mch', 'MCH', 'Mean corpuscular hemoglobin'),
-          ('mchc', 'MCHC', 'Mean corpuscular hemoglobin concentration'),
-          ('rdwcv', 'RDW-CV', 'Red cell distribution width')
-        ] %}
-        {% for name, label, description in fields %}
-        <label class="field-group" for="{{ name }}">
-          <span class="flex items-baseline justify-between gap-4">
-            <span class="field-label">{{ label }}</span>
-            <span class="field-description">{{ description }}</span>
-          </span>
-          <input
-            class="field-input"
-            id="{{ name }}"
-            name="{{ name }}"
-            type="text"
-            inputmode="decimal"
-            autocomplete="off"
-            required
-            aria-required="true"
-            placeholder="0.00"
-          />
-        </label>
-        {% endfor %}
-      </div>
+      <fieldset>
+        <legend class="sr-only">Six hematology parameters</legend>
+        <div class="analysis-fields grid gap-5 sm:grid-cols-2">
+          {% set fields = [
+            ('rbc', 'RBC', 'Red blood cell count'),
+            ('hb', 'Hb', 'Hemoglobin'),
+            ('mcv', 'MCV', 'Mean corpuscular volume'),
+            ('mch', 'MCH', 'Mean corpuscular hemoglobin'),
+            ('mchc', 'MCHC', 'Mean corpuscular hemoglobin concentration'),
+            ('rdwcv', 'RDW-CV', 'Red cell distribution width')
+          ] %}
+          {% for name, label, description in fields %}
+          <label class="field-group responsive-field" for="{{ name }}">
+            <span class="field-heading flex items-baseline justify-between gap-4">
+              <span class="field-label">{{ label }}</span>
+              <span class="field-description" id="{{ name }}-description">{{ description }}</span>
+            </span>
+            <input
+              class="field-input"
+              id="{{ name }}"
+              name="{{ name }}"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              enterkeyhint="{% if not loop.last %}next{% else %}done{% endif %}"
+              required
+              aria-required="true"
+              aria-describedby="{{ name }}-description"
+              placeholder="0.00"
+            />
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
 
       <div class="mt-8 border-t border-white/10 pt-7">
-        <label class="flex cursor-pointer items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition hover:border-white/20">
+        <label class="acknowledgement-card flex cursor-pointer items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition hover:border-white/20">
           <input
-            class="mt-1 size-4 shrink-0 accent-crimson-500"
+            class="acknowledgement-checkbox mt-0.5 size-5 shrink-0 accent-crimson-500"
             type="checkbox"
             name="acknowledged"
             value="true"
             x-model="agreed"
             required
+            aria-describedby="acknowledgement-description"
           />
           <span>
             <span class="block text-sm font-medium text-white/88">I understand the academic limitation.</span>
-            <span class="mt-1 block text-sm leading-6 text-white/48">
+            <span id="acknowledgement-description" class="mt-1 block text-sm leading-6 text-white/48">
               Saya memahami bahwa hasil HemaLens bukan diagnosis, bukan probabilitas klinis, dan tidak boleh digunakan sebagai dasar keputusan medis.
             </span>
           </span>
         </label>
       </div>
 
-      <div class="mt-8 flex flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-        <button type="reset" class="text-link" @click="agreed = false">Clear form</button>
+      <div class="form-actions mt-8 flex flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
+        <button type="reset" class="text-link form-action" @click="agreed = false">Clear form</button>
         <button
           type="submit"
-          class="button button--primary min-w-44 disabled:cursor-not-allowed disabled:opacity-35"
+          class="button button--primary form-action min-w-44 disabled:cursor-not-allowed disabled:opacity-35"
           :disabled="!agreed"
         >
           Run analysis

@@ -19,6 +19,28 @@ function supportsWebGL() {
   }
 }
 
+function getDeviceProfile() {
+  const coarsePointer =
+    window.matchMedia("(pointer: coarse)").matches ||
+    (navigator.maxTouchPoints || 0) > 0;
+  const narrowViewport = window.innerWidth < 768;
+  const saveData = navigator.connection?.saveData === true;
+  const lowMemory =
+    typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
+  const lowCpu =
+    typeof navigator.hardwareConcurrency === "number" &&
+    navigator.hardwareConcurrency <= 4;
+  const mobile = coarsePointer || narrowViewport;
+  const constrained = saveData || lowMemory || lowCpu;
+
+  return {
+    coarsePointer,
+    constrained,
+    mobile,
+    saveData,
+  };
+}
+
 function requestPath(event) {
   const rawPath =
     event.detail?.pathInfo?.requestPath ??
@@ -52,24 +74,43 @@ class HemaLensSceneController {
     this.pointerCurrent = new THREE.Vector2(0, 0);
     this.resizeObserver = null;
     this.paused = false;
+    this.profile = getDeviceProfile();
+    this.pointerEnabled = false;
+    this.lastRenderTime = 0;
+    this.minimumFrameInterval = 0;
 
     this.handlePointerMove = this.handlePointerMove.bind(this);
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.handleContextLost = this.handleContextLost.bind(this);
     this.animate = this.animate.bind(this);
   }
 
   init() {
-    if (this.active || prefersReducedMotion() || !supportsWebGL()) {
+    this.profile = getDeviceProfile();
+
+    const root = document.getElementById(SCENE_ID);
+    if (!root || this.active) {
       return;
     }
 
-    const root = document.getElementById(SCENE_ID);
-    if (!root) {
+    if (
+      prefersReducedMotion() ||
+      this.profile.saveData ||
+      !supportsWebGL()
+    ) {
+      root.dataset.active = "false";
+      root.dataset.fallback = "true";
       return;
     }
 
     this.root = root;
+    this.root.dataset.fallback = "false";
+    this.root.dataset.performanceTier = this.profile.constrained
+      ? "constrained"
+      : this.profile.mobile
+        ? "mobile"
+        : "desktop";
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
 
@@ -81,31 +122,47 @@ class HemaLensSceneController {
 
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: window.innerWidth >= 768,
-      powerPreference: "high-performance",
+      antialias: !this.profile.mobile && !this.profile.constrained,
+      powerPreference: this.profile.constrained ? "low-power" : "high-performance",
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+
+    const pixelRatio = this.profile.mobile
+      ? 1
+      : Math.min(window.devicePixelRatio || 1, this.profile.constrained ? 1.25 : 1.5);
+
+    this.renderer.setPixelRatio(pixelRatio);
     this.renderer.setSize(width, height, false);
     this.renderer.setClearColor(0x000000, 0);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.domElement.setAttribute("aria-hidden", "true");
     this.renderer.domElement.className = "hemalens-scene__canvas";
+    this.renderer.domElement.addEventListener(
+      "webglcontextlost",
+      this.handleContextLost,
+      false,
+    );
     root.replaceChildren(this.renderer.domElement);
 
     this.addLighting();
     this.addCells(width);
 
-    window.addEventListener("pointermove", this.handlePointerMove, {
-      passive: true,
-    });
+    this.pointerEnabled = !this.profile.coarsePointer;
+    if (this.pointerEnabled) {
+      window.addEventListener("pointermove", this.handlePointerMove, {
+        passive: true,
+      });
+    }
+
     document.addEventListener("visibilitychange", this.handleVisibilityChange);
 
     this.resizeObserver = new ResizeObserver(this.handleResize);
     this.resizeObserver.observe(root);
 
+    this.minimumFrameInterval = this.profile.mobile ? 1000 / 30 : 0;
+    this.lastRenderTime = 0;
     this.active = true;
     root.dataset.active = "true";
-    this.animate();
+    this.animate(0);
   }
 
   addLighting() {
@@ -137,10 +194,15 @@ class HemaLensSceneController {
     });
     this.materials = [deepMaterial, brightMaterial];
 
-    const mobile = width < 768;
-    const count = mobile ? 16 : 34;
-    const horizontalSpread = mobile ? 12 : 24;
-    const verticalSpread = mobile ? 16 : 14;
+    const count = this.profile.constrained
+      ? this.profile.mobile
+        ? 8
+        : 18
+      : this.profile.mobile
+        ? 12
+        : 30;
+    const horizontalSpread = this.profile.mobile ? 12 : 24;
+    const verticalSpread = this.profile.mobile ? 16 : 14;
 
     for (let index = 0; index < count; index += 1) {
       const material = this.materials[index % this.materials.length];
@@ -186,6 +248,20 @@ class HemaLensSceneController {
     }
   }
 
+  handleContextLost(event) {
+    event.preventDefault();
+    this.paused = true;
+    this.active = false;
+    if (this.animationFrame !== null) {
+      window.cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
+    }
+    if (this.root) {
+      this.root.dataset.active = "false";
+      this.root.dataset.fallback = "true";
+    }
+  }
+
   handleResize() {
     if (!this.root || !this.camera || !this.renderer) {
       return;
@@ -198,7 +274,7 @@ class HemaLensSceneController {
     this.renderer.setSize(width, height, false);
   }
 
-  animate() {
+  animate(timestamp) {
     if (!this.active) {
       return;
     }
@@ -208,13 +284,20 @@ class HemaLensSceneController {
       return;
     }
 
+    if (
+      this.minimumFrameInterval > 0 &&
+      timestamp - this.lastRenderTime < this.minimumFrameInterval
+    ) {
+      return;
+    }
+    this.lastRenderTime = timestamp;
+
     const elapsed = this.clock.getElapsedTime();
     this.pointerCurrent.lerp(this.pointerTarget, 0.035);
 
     this.cells.forEach((cell, index) => {
       const data = cell.userData;
       cell.position.y += data.driftY;
-      cell.position.x += data.driftX;
       cell.position.x =
         data.baseX + Math.sin(elapsed * 0.18 + data.phase) * 0.55;
       cell.rotation.x += data.rotationX;
@@ -226,10 +309,16 @@ class HemaLensSceneController {
       }
     });
 
-    this.camera.position.x +=
-      (this.pointerCurrent.x * 0.8 - this.camera.position.x) * 0.025;
-    this.camera.position.y +=
-      (-this.pointerCurrent.y * 0.5 - this.camera.position.y) * 0.025;
+    if (this.pointerEnabled) {
+      this.camera.position.x +=
+        (this.pointerCurrent.x * 0.8 - this.camera.position.x) * 0.025;
+      this.camera.position.y +=
+        (-this.pointerCurrent.y * 0.5 - this.camera.position.y) * 0.025;
+    } else {
+      this.camera.position.x += (0 - this.camera.position.x) * 0.025;
+      this.camera.position.y += (0 - this.camera.position.y) * 0.025;
+    }
+
     this.camera.lookAt(0, 0, 0);
     this.renderer.render(this.scene, this.camera);
   }
@@ -247,7 +336,9 @@ class HemaLensSceneController {
       this.animationFrame = null;
     }
 
-    window.removeEventListener("pointermove", this.handlePointerMove);
+    if (this.pointerEnabled) {
+      window.removeEventListener("pointermove", this.handlePointerMove);
+    }
     document.removeEventListener(
       "visibilitychange",
       this.handleVisibilityChange,
@@ -264,6 +355,10 @@ class HemaLensSceneController {
     this.materials = [];
 
     if (this.renderer) {
+      this.renderer.domElement.removeEventListener(
+        "webglcontextlost",
+        this.handleContextLost,
+      );
       this.renderer.renderLists?.dispose();
       this.renderer.dispose();
       this.renderer.forceContextLoss?.();
@@ -281,6 +376,8 @@ class HemaLensSceneController {
     this.camera = null;
     this.renderer = null;
     this.clock = null;
+    this.pointerEnabled = false;
+    this.lastRenderTime = 0;
     this.pointerTarget.set(0, 0);
     this.pointerCurrent.set(0, 0);
   }
@@ -290,7 +387,7 @@ const controller = new HemaLensSceneController();
 window.HemaLensScene = controller;
 
 function initializeScene() {
-  if (document.querySelector("#main-workspace section")) {
+  if (document.querySelector("#main-workspace [data-page='landing']")) {
     controller.init();
   }
 }
