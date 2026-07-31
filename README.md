@@ -341,34 +341,6 @@ numerical parameters required by the research interface.
 - Out-of-distribution detection has not yet been implemented.
 - Public deployment and cross-platform parity testing are still pending.
 
-## Roadmap
-
-- [x] Frozen inference bundle and integrity verification
-- [x] FastAPI health and prediction endpoints
-- [x] Server-rendered MVP inference interface
-- [x] Three.js landing motion
-- [x] Separate Research and About pages
-- [ ] Complete mobile-responsive interface
-- [ ] Accessibility and touch-target audit
-- [ ] Docker regression verification
-- [ ] Local SHAP explanation
-- [ ] Research transparency visualizations
-- [ ] Vercel preview deployment
-- [ ] Cross-environment golden-parity verification
-- [ ] Production release
-
-## Contributing
-
-HemaLens is currently developed as a focused academic project.
-
-Before proposing a substantial change:
-
-1. Open an issue describing the problem and intended outcome.
-2. Keep model artifacts, preprocessing order, and threshold unchanged unless the
-   research methodology is formally revised.
-3. Add or update automated tests.
-4. Do not add clinical claims, patient-data storage, or diagnostic language.
-
 ## License
 
 A project license has not yet been selected. Do not redistribute or reuse the
