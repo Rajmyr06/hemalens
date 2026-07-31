@@ -2,7 +2,7 @@
 <html lang="id" class="bg-ink text-white">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta
       name="description"
       content="{% block description %}HemaLens research interface.{% endblock %}"
@@ -11,29 +11,39 @@
 
     <link
       rel="stylesheet"
-      href="{{ url_for('static', path='/css/app.css') }}"
+      href="{{ url_for('static', path='/css/app.css') }}?v=2c1"
     />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', path='/css/content-pages.css') }}?v=1.0.0"
+      href="{{ url_for('static', path='/css/content-pages.css') }}?v=1.1.0"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/responsive.css') }}?v=2c1"
+    />
+    <script
+      src="{{ url_for('static', path='/js/mobile-nav.js') }}?v=2c1"
+      defer
+    ></script>
   </head>
 
   <body class="min-h-screen overflow-x-hidden bg-ink text-white antialiased">
+    <a href="#secondary-main" class="skip-link">Lewati ke konten utama</a>
+
     <div class="site-background" aria-hidden="true">
       <div class="site-orb site-orb--one"></div>
       <div class="site-orb site-orb--two"></div>
       <div class="site-grain"></div>
     </div>
 
-    <header class="fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl">
+    <header class="site-header fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl" data-mobile-nav>
       <nav
-        class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10"
+        class="site-nav mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10"
         aria-label="Navigasi utama"
       >
         <a
           href="/"
-          class="group inline-flex items-center gap-3"
+          class="site-brand group inline-flex items-center gap-3"
           aria-label="Kembali ke halaman utama HemaLens"
         >
           <span class="brand-mark" aria-hidden="true"><span></span></span>
@@ -42,9 +52,9 @@
           </span>
         </a>
 
-        <div class="flex items-center gap-2 sm:gap-6">
+        <div class="site-nav__desktop hidden items-center gap-6 sm:flex">
           <a
-            class="nav-link hidden sm:inline-flex {% if active_page == 'research' %}is-active{% endif %}"
+            class="nav-link {% if active_page == 'research' %}is-active{% endif %}"
             href="/research"
             {% if active_page == 'research' %}aria-current="page"{% endif %}
           >
@@ -52,7 +62,7 @@
           </a>
 
           <a
-            class="nav-link hidden sm:inline-flex {% if active_page == 'about' %}is-active{% endif %}"
+            class="nav-link {% if active_page == 'about' %}is-active{% endif %}"
             href="/about"
             {% if active_page == 'about' %}aria-current="page"{% endif %}
           >
@@ -63,10 +73,91 @@
             Try model
           </a>
         </div>
+
+        <button
+          type="button"
+          class="mobile-nav-toggle sm:hidden"
+          aria-expanded="false"
+          aria-controls="mobile-navigation-secondary"
+          aria-label="Buka menu navigasi"
+          data-mobile-nav-toggle
+        >
+          <span class="mobile-nav-toggle__line"></span>
+          <span class="mobile-nav-toggle__line"></span>
+          <span class="sr-only">Buka menu</span>
+        </button>
       </nav>
+
+      <div
+        id="mobile-navigation-secondary"
+        class="mobile-nav-panel"
+        data-mobile-nav-panel
+        hidden
+      >
+        <button
+          type="button"
+          class="mobile-nav-panel__backdrop"
+          aria-label="Tutup menu navigasi"
+          data-mobile-nav-close
+          tabindex="-1"
+        ></button>
+
+        <div
+          class="mobile-nav-sheet"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu navigasi"
+        >
+          <div class="mobile-nav-sheet__header">
+            <p>Navigation</p>
+            <button
+              type="button"
+              class="mobile-nav-close"
+              aria-label="Tutup menu navigasi"
+              data-mobile-nav-close
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <nav class="mobile-nav-links" aria-label="Navigasi mobile">
+            <a
+              class="mobile-nav-link mobile-nav-link--primary"
+              href="/#try-model"
+              data-mobile-nav-link
+              data-mobile-nav-autofocus
+            >
+              <span>Try the research model</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              class="mobile-nav-link {% if active_page == 'research' %}is-active{% endif %}"
+              href="/research"
+              data-mobile-nav-link
+              {% if active_page == 'research' %}aria-current="page"{% endif %}
+            >
+              <span>Research</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              class="mobile-nav-link {% if active_page == 'about' %}is-active{% endif %}"
+              href="/about"
+              data-mobile-nav-link
+              {% if active_page == 'about' %}aria-current="page"{% endif %}
+            >
+              <span>About</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </nav>
+
+          <p class="mobile-nav-sheet__note">
+            Academic research interface · No patient history stored
+          </p>
+        </div>
+      </div>
     </header>
 
-    <main class="content-page">
+    <main id="secondary-main" class="content-page" tabindex="-1">
       {% block content %}{% endblock %}
     </main>
   </body>

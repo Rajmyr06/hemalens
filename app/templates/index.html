@@ -2,7 +2,7 @@
 <html lang="id" class="bg-ink text-white">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta
       name="description"
       content="HemaLens adalah antarmuka penelitian untuk analisis pola hematologi berbasis model XGBoost."
@@ -10,15 +10,27 @@
     <title>{{ app_name }} — Explainable Hematology Pattern Analysis</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', path='/css/app.css') }}?v=2b7"
+      href="{{ url_for('static', path='/css/app.css') }}?v=2c1"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/landing-v4.css') }}?v=4.1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/responsive.css') }}?v=2c1"
     />
     <script
-      src="{{ url_for('static', path='/js/app.js') }}"
+      src="{{ url_for('static', path='/js/app.js') }}?v=2c1"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', path='/js/mobile-nav.js') }}?v=2c1"
       defer
     ></script>
     <script
       type="module"
-      src="{{ url_for('static', path='/js/hemalens-scene.js') }}"
+      src="{{ url_for('static', path='/js/hemalens-scene.js') }}?v=2c1"
     ></script>
     <script
       src="{{ url_for('static', path='/vendor/htmx.min.js') }}"
@@ -28,10 +40,10 @@
       src="{{ url_for('static', path='/vendor/alpine.min.js') }}"
       defer
     ></script>
-      <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='/css/landing-v4.css') }}?v=4.0.0"
-    />
+    <script
+      src="{{ url_for('static', path='/js/hero-typewriter.js') }}?v=2c1"
+      defer
+    ></script>
   </head>
   <body
     class="min-h-screen overflow-x-hidden bg-ink text-white antialiased selection:bg-crimson-500/40"
@@ -41,7 +53,7 @@
   >
     <a
       href="#main-workspace"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+      class="skip-link"
     >
       Lewati ke konten utama
     </a>
@@ -56,16 +68,17 @@
       role="status"
       aria-live="polite"
       aria-label="Memuat HemaLens"
+      data-hemalens-splash
     >
-      <div class="relative flex flex-col items-center gap-6">
+      <div class="splash-screen__content relative flex flex-col items-center gap-6">
         <div class="brand-mark brand-mark--large" aria-hidden="true">
           <span></span>
         </div>
         <div class="text-center">
-          <p class="font-display text-4xl font-light tracking-[-0.04em] sm:text-5xl">
+          <p class="splash-screen__brand font-display text-4xl font-light tracking-[-0.04em] sm:text-5xl">
             HemaLens
           </p>
-          <p class="mt-3 text-[0.65rem] font-semibold uppercase tracking-[0.36em] text-white/45">
+          <p class="splash-screen__tagline mt-3 text-[0.65rem] font-semibold uppercase tracking-[0.36em] text-white/45">
             Logic before pixels
           </p>
         </div>
@@ -86,12 +99,13 @@
       x-cloak
       x-show="contentReady"
       :class="{ 'landing-reveal--active': landingEntered }"
-      class="landing-reveal landing-reveal--header fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl"
+      class="landing-reveal landing-reveal--header site-header fixed inset-x-0 top-0 z-40 border-b border-white/8 bg-ink/70 backdrop-blur-xl"
+      data-mobile-nav
     >
-      <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10" aria-label="Navigasi utama">
+      <nav class="site-nav mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10" aria-label="Navigasi utama">
         <button
           type="button"
-          class="group inline-flex items-center gap-3"
+          class="site-brand group inline-flex items-center gap-3"
           hx-get="/partials/landing"
           hx-target="#main-workspace"
           hx-swap="innerHTML transition:true"
@@ -102,9 +116,9 @@
           <span class="font-display text-xl font-light tracking-[-0.03em]">HemaLens</span>
         </button>
 
-        <div class="flex items-center gap-2 sm:gap-6">
-          <a class="nav-link hidden sm:inline-flex" href="/research">Research</a>
-          <a class="nav-link hidden sm:inline-flex" href="/about">About</a>
+        <div class="site-nav__desktop hidden items-center gap-6 sm:flex">
+          <a class="nav-link" href="/research">Research</a>
+          <a class="nav-link" href="/about">About</a>
           <button
             type="button"
             class="button button--compact"
@@ -116,7 +130,82 @@
             Try model
           </button>
         </div>
+
+        <button
+          type="button"
+          class="mobile-nav-toggle sm:hidden"
+          aria-expanded="false"
+          aria-controls="mobile-navigation-home"
+          aria-label="Buka menu navigasi"
+          data-mobile-nav-toggle
+        >
+          <span class="mobile-nav-toggle__line"></span>
+          <span class="mobile-nav-toggle__line"></span>
+          <span class="sr-only">Buka menu</span>
+        </button>
       </nav>
+
+      <div
+        id="mobile-navigation-home"
+        class="mobile-nav-panel"
+        data-mobile-nav-panel
+        hidden
+      >
+        <button
+          type="button"
+          class="mobile-nav-panel__backdrop"
+          aria-label="Tutup menu navigasi"
+          data-mobile-nav-close
+          tabindex="-1"
+        ></button>
+
+        <div
+          class="mobile-nav-sheet"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu navigasi"
+        >
+          <div class="mobile-nav-sheet__header">
+            <p>Navigation</p>
+            <button
+              type="button"
+              class="mobile-nav-close"
+              aria-label="Tutup menu navigasi"
+              data-mobile-nav-close
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+
+          <nav class="mobile-nav-links" aria-label="Navigasi mobile">
+            <button
+              type="button"
+              class="mobile-nav-link mobile-nav-link--primary"
+              hx-get="/partials/form"
+              hx-target="#main-workspace"
+              hx-swap="innerHTML transition:true"
+              @click="workspace = 'form'"
+              data-mobile-nav-link
+              data-mobile-nav-autofocus
+            >
+              <span>Try the research model</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+            <a class="mobile-nav-link" href="/research" data-mobile-nav-link>
+              <span>Research</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a class="mobile-nav-link" href="/about" data-mobile-nav-link>
+              <span>About</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </nav>
+
+          <p class="mobile-nav-sheet__note">
+            Academic research interface · No patient history stored
+          </p>
+        </div>
+      </div>
     </header>
 
     <main
@@ -126,21 +215,16 @@
       :class="{ 'landing-reveal--active': landingEntered }"
       class="landing-reveal landing-reveal--main relative z-10 min-h-screen"
       aria-live="polite"
+      aria-busy="false"
     >
       {% include "partials/landing.html" %}
     </main>
 
-    <div id="request-indicator" class="htmx-indicator fixed bottom-5 right-5 z-50" role="status">
+    <div id="request-indicator" class="htmx-indicator request-indicator fixed bottom-5 right-5 z-50" role="status" aria-live="polite">
       <div class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-black/80 px-4 py-3 text-sm text-white/75 shadow-2xl backdrop-blur-xl">
         <span class="size-2 animate-pulse rounded-full bg-crimson-400"></span>
         Memproses permintaan
       </div>
     </div>
-  
-    <script
-      src="{{ url_for('static', path='/js/hero-typewriter.js') }}?v=2b5"
-      defer
-    ></script>
-
   </body>
 </html>
