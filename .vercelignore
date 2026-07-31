@@ -1,5 +1,6 @@
 .git
 .github
+.env
 .venv
 .pytest_cache
 .mypy_cache
@@ -8,7 +9,9 @@
 node_modules
 tests
 docs
+data
 __pycache__
 *.pyc
+*.ipynb
 *.zip
 .DS_Store
