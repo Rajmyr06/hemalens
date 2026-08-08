@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     app_name: str = "HemaLens"
     app_slug: str = "hemalens"
-    app_version: str = "0.1.0"
+    app_version: str = "1.0.0"
     app_env: str = "development"
     debug: bool = False
     log_level: str = "INFO"

@@ -13,8 +13,7 @@ The matching public dataset page is **HPLC-Based Thalassemia Screening Data** on
 Kaggle. It describes anonymized HPLC and CBC screening data from West Bengal,
 India, and lists the license as CC BY-SA 4.0.
 
-Source:
-https://www.kaggle.com/datasets/abhraghoshcmc/hplc-based-thalassemia-screening-data
+Source: [HPLC-Based Thalassemia Screening Data on Kaggle](https://www.kaggle.com/datasets/abhraghoshcmc/hplc-based-thalassemia-screening-data)
 
 ## Columns used by this project
 
@@ -56,3 +55,5 @@ See:
 - Do not expose row-level source data through the public website.
 - Do not treat the target mapping as clinical diagnosis.
 - Do not present observed dataset bounds as clinical reference ranges.
+- Do not redistribute the source dataset from this repository; obtain it from
+  the source page and follow its attribution and share-alike requirements.

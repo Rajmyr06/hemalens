@@ -10,6 +10,27 @@
 - **Features:** RBC, Hb, MCV, MCH, MCHC, RDW-CV
 - **Dataset fingerprint:** `51a5729c9864a5292c134fb911e199d628fb4812e19367c8cc503363b009daee`
 
+## Training and serving boundary
+
+Model development is intentionally separated from this web-serving repository.
+The research workflow performs data preparation, model comparison, threshold
+selection, evaluation, and SHAP analysis. HemaLens only loads the approved,
+frozen inference bundle and never trains or updates a model from public input.
+
+The serving bundle contains:
+
+- the fitted preprocessing object;
+- the fitted XGBoost estimator;
+- ordered feature schema and units;
+- model metadata and package versions;
+- frozen evaluation metrics;
+- checksums and 18 golden-parity samples.
+
+This boundary reduces accidental training-serving drift. It does not make the
+original training study independently reproducible from this repository alone;
+the source dataset and research workflow remain separate and subject to their
+own access and licensing requirements.
+
 ## Intended use
 
 This artifact supports an academic research demonstration and portfolio website.
@@ -45,6 +66,11 @@ The original target labels were mapped into `Normal`, `Thalassemia_related`, and
 | PR-AUC | 0.757274 |
 
 Confusion matrix: `[[2324, 33], [43, 78]]`.
+
+These values describe one frozen held-out split of the source dataset. They are
+not prospective clinical performance estimates and must not be generalized to
+new hospitals, instruments, regions, or patient populations without external
+validation.
 
 ## Selection rationale and trade-offs
 

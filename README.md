@@ -52,10 +52,13 @@ database, or stored prediction history.
 
 ## Demo
 
-A public deployment has not been published yet.
+The public research demonstration is available at:
 
-The current release is developed and tested locally before mobile-responsive
-quality assurance and preview deployment.
+**[hemalens-webapp.vercel.app](https://hemalens-webapp.vercel.app/)**
+
+The deployment exposes the same frozen inference bundle described in this
+repository. Availability of the demonstration does not change the academic-only,
+non-diagnostic scope of the model.
 
 ## Model Interface
 
@@ -77,6 +80,15 @@ Current model metadata:
 
 The model decision score is an internal research output. It is not a clinical
 probability, disease risk estimate, or diagnostic confidence score.
+
+Detailed documentation:
+
+- [Model card](docs/MODEL_CARD.md) — intended use, evaluation, trade-offs,
+  explainability, and limitations.
+- [Dataset card](docs/DATASET_CARD.md) — source, license, target mapping, and
+  data-quality findings.
+- [Reproducibility guide](docs/REPRODUCIBILITY.md) — separation between model
+  development and serving, artifact verification, and reproducibility limits.
 
 ## Architecture
 
@@ -217,7 +229,7 @@ Expected structure:
 {
   "status": "healthy",
   "application": "HemaLens",
-  "application_version": "0.1.0",
+  "application_version": "1.0.0",
   "model_loaded": true,
   "model_version": "hematology-xgb-smote-thr091-v1.0.0"
 }
@@ -337,9 +349,10 @@ numerical parameters required by the research interface.
 - The application does not establish a medical diagnosis.
 - Model outputs depend on the frozen research dataset and methodology.
 - Clinical reference ranges are not currently presented as decision rules.
-- Local SHAP explanations are not part of the current stable milestone.
+- Global SHAP findings are documented in the model card; local explanations
+  are not served by the application.
 - Out-of-distribution detection has not yet been implemented.
-- Public deployment and cross-platform parity testing are still pending.
+- The public deployment has not undergone clinical or external validation.
 
 ## License
 
